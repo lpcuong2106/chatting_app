@@ -1,0 +1,52 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto;
+}
+
+.sidebar {
+  border-right: 1px solid #d4d4d4;
+}
+section.wrapper {
+  height: 100vh;
+}
+section.wrapper .app {
+  height: 100%;
+}
+
+.titleApp {
+  margin-top: 40px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 48px;
+  line-height: 56px;
+  text-align: center;
+  color: #000000;
+}
+.search-user {
+  text-align: center;
+}
+.search-user input {
+  background: #f7f7f7;
+  border-radius: 15px;
+  width: 100%;
+  color: #bfbec1;
+  padding: 12px 17px;
+  outline: none;
+  border: none;
+}
+#form {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 0.25rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 3rem;
+  width: 100%;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+}

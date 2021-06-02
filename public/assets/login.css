@@ -1,0 +1,39 @@
+.loginTitle {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 64px;
+  line-height: 75px;
+  color: #4252dc;
+  margin-top: 192px;
+  text-align: center;
+  margin-bottom: 78px;
+}
+.loginIcon {
+  height: 100vh;
+  max-width: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+.form-input input {
+  padding: 23px 46px;
+  margin-bottom: 54px;
+}
+.loginSubmit {
+  background: #4252dc;
+  border-radius: 22px;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 28px;
+  color: white;
+  border: none !important;
+  padding: 10px 60px;
+}
+.loginSubmit:focus {
+  outline: none;
+  border: none;
+}
+
+.createAccount {
+  text-align: center;
+  margin-top: 40px;
+}
