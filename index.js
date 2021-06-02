@@ -5,19 +5,18 @@ const server = http.createServer(app);
 const {Server} = require("socket.io");
 const bodyParser = require('body-parser');
 const io = new Server(server);
+const cookieParser = require('cookie-parser')
 var session = require('express-session')
 const connectionDB = require('./src/connectionDB')
+
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
-app.use(session({
-  secret: 'chatting_app',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}))
+app.use(cookieParser())
+
+app.use(session({secret: 'chatting_app',saveUninitialized: true,resave: true}));
+app.use(bodyParser.json());      
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.urlencoded({
   extended: true

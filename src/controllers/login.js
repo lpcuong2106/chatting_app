@@ -8,11 +8,7 @@ const Login = (req, res) => {
      
         if(rows.length > 0){
             req.session.user = username;
-            return res.render('index', {
-                message: 'Registration Complete. Please login to continue.',
-                messageClass: 'alert-success',
-                username: req.session.user
-            });
+            return res.redirect('/');
         }else{
             return res.render('login', {
                 message: 'Registration Complete. Please login to continue.',
@@ -20,9 +16,7 @@ const Login = (req, res) => {
             });
         }
        
-      })
-
-   
+      })   
 }
 
 module.exports = {

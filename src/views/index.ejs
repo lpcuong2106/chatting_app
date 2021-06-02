@@ -51,7 +51,7 @@
       if (input.value) {
         socket.emit('chat message', {
           message: input.value,
-          user: '<%= username %>'
+          user: '<%- locals.user %>'
         });
         input.value = '';
       }
