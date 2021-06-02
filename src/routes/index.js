@@ -1,4 +1,4 @@
-const { Login } = require('../controllers/login');
+const { Login, Register } = require('../controllers/login');
 const { middlewareLogin } = require('../middleware/checkLogin');
 
 var router = require('express').Router();
@@ -6,12 +6,12 @@ var router = require('express').Router();
 router.get('/login',[middlewareLogin], (req, res) => {
     res.render('login');
 });
-router.post('/login', Login);
+router.post('/login', [middlewareLogin], Login);
 
-router.get('/register', (req, res) => {
+router.get('/register', [middlewareLogin], (req, res) => {
     res.render('register');
 });
-router.post('/register', Login);
+router.post('/register', [middlewareLogin], Register);
 
 router.use(function (req, res, next) {
     if(req.session && req.session.user != null){

@@ -50,3 +50,35 @@ section.wrapper .app {
   box-sizing: border-box;
   backdrop-filter: blur(10px);
 }
+
+.listUserView {
+  list-style-type: none;
+  padding: 0;
+}
+.listUserItem.active {
+  background: #f7f7f7;
+  border-radius: 11px;
+}
+
+.listUserItem {
+  display: flex;
+  flex-direction: row;
+  margin: 43px 0;
+  padding: 8px 14px;
+}
+.listUserItem img {
+  margin-right: 8px;
+  width: 64px;
+  height: 64px;
+}
+.listUserItem h4 {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+}
+.listUserItem p {
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  color: #d4d4d5;
+}

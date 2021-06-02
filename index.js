@@ -14,13 +14,9 @@ app.set('view engine', 'ejs')
 
 app.use(cookieParser())
 
-app.use(session({secret: 'chatting_app',saveUninitialized: true,resave: true}));
+app.use(session({secret: 'chatting_app',saveUninitialized: true,resave: true, cookie: { maxAge: 600000}}));
 app.use(bodyParser.json());      
 app.use(bodyParser.urlencoded({extended: true}));
-
-app.use(express.urlencoded({
-  extended: true
-}))
 
 app.set('views', `${__dirname}/src/views`);
 app.use(require(`${__dirname}/src/routes`));
@@ -33,14 +29,17 @@ app.use(function(req, res, next) {
 });
 
 io.on('connection', (socket) => {
-  
+ 
+    // io.emit('user_joined', {
+    //   username: eq.session.user
+    // });
+
     socket.broadcast.emit('hi');
     socket.broadcast.emit("hello", "world");
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
         console.log('message: ' + msg);
     });
-
 
     socket.join('some room'); 
     socket.on('disconnect', () => {
@@ -49,6 +48,13 @@ io.on('connection', (socket) => {
 });
 io.to('some room').emit('some event');
 
+io.of("/").adapter.on("create-room", (room) => {
+  console.log(`room ${room} was created`);
+});
+
+io.of("/").adapter.on("join-room", (room, id) => {
+  console.log(`socket ${id} has joined room ${room}`);
+});
 
 server.listen(3000, () => {
   console.log('listening on *:3000');
