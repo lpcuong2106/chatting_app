@@ -1,3 +1,4 @@
+const { Home, Detail } = require('../controllers/home');
 const { Login, Register } = require('../controllers/login');
 const { middlewareLogin } = require('../middleware/checkLogin');
 
@@ -25,10 +26,12 @@ router.use(function(req, res, next) {
     next();
 });
 
-router.get('/', (req, res) => {
-    res.render('index');
-});
-
+router.get('/', Home);
+router.get('/messages/:id', Detail);
+router.post('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/login')
+})
 router.get('/logout',(req,res) => {
     req.session.destroy((err) => {
         if(err) {

@@ -27,6 +27,7 @@
   color: white;
   border: none !important;
   padding: 10px 60px;
+  cursor: pointer;
 }
 .loginSubmit:focus {
   outline: none;

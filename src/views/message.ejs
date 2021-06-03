@@ -9,23 +9,19 @@
       #input:focus { outline: none; }
       #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
 
-      #messages { list-style-type: none; margin: 0; padding: 0; }
+     
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="/assets/main.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js" integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css" integrity="sha512-NXUhxhkDgZYOMjaIgd89zF2w51Mub53Ru3zCNp5LTlEzMbNNAjTjDbpURYGS5Mop2cU4b7re1nOIucsVlrx9fA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
   <body>
       <section  class="container-fluid wrapper">
-   
           <div class="row app">
                 <div class="col-3 sidebar" >
                     <h1 class="titleApp">Thien Chat App</h1>
@@ -70,51 +66,38 @@
   <script src="/socket.io/socket.io.js"></script>
     <script>
     var socket = io();
-    var form = document.getElementById('form');
-    var input = document.getElementById('input');
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (input.value) {
-        socket.emit('chat message', {
-          message: input.value,
-          user: '<%- locals.user.username %>',
-          room: 'A_B'
+    $(document).ready(() => {
+        socket.emit('createRoom', {
+            userTo: '<%- locals.userTo %>',
+            userCurrent: '<%- locals.userCurrent %>'
         });
-        input.value = '';
-      }
-    });
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
 
-    socket.on('new_user_join', function(msg){
-      new Noty({
-          theme: 'relax',
-          text: 'Some notification text',
-          progressBar: true,
-          timeout: 1000,
+        form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+            socket.emit('chat message', {
+                message: input.value,
+                user: '<%- locals.user.username %>',
+                room: '<%- locals.userCurrent  %>_<%- locals.userTo %>'
+            });
+            input.value = '';
+        }
+        });
 
-      }).show();
+
+        socket.on('chat message', function(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg.user + " " + msg.message;
+            messages.appendChild(item);
+            setTimeout(() => {
+                var elem = document.getElementById('messages');
+                elem.scrollTop = elem.scrollHeight;
+            }, 500)
+            
+        });
     })
-    
-    // socket.on('user_left', function(msg){
-    //   $('.listUserView li').each((index,item) => {
-    //    const infoItem = $(item).find('.itemInfo h4')[0].outerText
-    //    console.log('chay day', msg)
-    //    if(infoItem == msg){
-    //     $(item).remove();
-    //    }
-    //   })
-    // })
-    socket.on('chat message', function(msg) {
-      var item = document.createElement('li');
-      item.textContent = msg.user + " " + msg.message;
-      messages.appendChild(item);
-      setTimeout(() => {
-        console.log('chay day')
-        var elem = document.getElementById('messages');
-        elem.scrollTop = elem.scrollHeight;
-      }, 500)
-    
-      // window.scrollTo(0, document.body.scrollHeight);
-    });
+   
     </script>
 </html>

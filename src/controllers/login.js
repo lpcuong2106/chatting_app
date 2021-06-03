@@ -7,7 +7,10 @@ const Login = (req, res) => {
         if (err) throw err
      
         if(rows.length > 0){
-            req.session.user = username;
+            req.session.user = {
+                username,
+                id: rows[0].id
+            };
           
             res.json({
                 status: 'OK',
@@ -50,9 +53,12 @@ const Register = (req, res) => {
             });
            
         }else{
-            connectionDB.query(`insert into user (username, password) values (?,?)`, [username, password],function (err, rows, fields) {
+            connectionDB.query(`insert into user (username, password) values (?,?); SELECT LAST_INSERT_ID();`, [username, password],function (err, rows, fields) {
                 // if (err) throw err
-                req.session.user = username;
+                req.session.user = {
+                    username,
+                    id: rows.id
+                };
                 return res.redirect('/')
             })
           

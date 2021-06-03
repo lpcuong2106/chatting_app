@@ -1,4 +1,5 @@
 var mysql = require('mysql');
+const util = require('util');
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -7,6 +8,8 @@ const connection = mysql.createConnection({
   database: 'chatting_app',
   insecureAuth : true
 })
+
+const query = util.promisify(connection.query).bind(connection);
 
 connection.connect(function(err) {
     if (err) {
@@ -18,4 +21,4 @@ connection.connect(function(err) {
 
   
 module.exports = 
-  connection
+  query

@@ -29,10 +29,17 @@ app.use(require(`${__dirname}/src/routes`));
 io.use(wrap(session({secret: 'chatting_app',saveUninitialized: true,resave: true})));
 
 io.on('connection', (socket) => {
+    socket.broadcast.emit('new_user_join')
     socket.authenticated = false;
-   
+    socket.join('A_B')
     socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
+      console.log('client gui server', msg.room)
+      const userFrom = msg.room.split('_')[0];
+      const userTo = msg.room.split('_')[1];
+      connectionDB.query('insert into messages (user_from, user_to, message, created_at) values (?,?,?,?)', [userFrom, userTo, msg.message, new Date()], function(err){
+          if(err) console.log(err)
+      })
+      io.to(msg.room).emit('chat message', msg);
     });
 
     socket.on("disconnecting", (reason) => {
@@ -48,19 +55,17 @@ io.on('connection', (socket) => {
       }
      
     });
-
+    socket.on('createRoom', async function({userTo, userCurrent}) {
+      socket.join([`${userCurrent}_${userTo}`, `${userTo}_${userCurrent}`]) 
+    })
     socket.on('create user', async function(details, callback){
       // Set details on the socket.
       
       socket.authenticated = true;
       socket.username = details;
-  
-      // io.to('chatroom').emit('user_join', details )
-      io.emit('user_join', details )
+
     })
 });
-
-// io.to('some room').emit('some event');
 
 io.of("/").adapter.on("create-room", (room) => {
   console.log(`room ${room} was created`);
@@ -68,8 +73,6 @@ io.of("/").adapter.on("create-room", (room) => {
 
 io.of("/").adapter.on("join-room", (room, id) => {
   console.log(`socket ${id} has joined room ${room}`);
-
-
 });
 
 io.of('/').adapter.on("leave-room", (room, id) => {
@@ -77,11 +80,11 @@ io.of('/').adapter.on("leave-room", (room, id) => {
 })
 
 /// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
 server.listen(3000, () => {
   console.log('listening on *:3000');

@@ -40,13 +40,10 @@ section.wrapper .app {
 #form {
   background: rgba(0, 0, 0, 0.15);
   padding: 0.25rem;
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
-  height: 3rem;
-  width: 100%;
+  width: 71%;
   box-sizing: border-box;
   backdrop-filter: blur(10px);
 }
@@ -54,18 +51,25 @@ section.wrapper .app {
 .listUserView {
   list-style-type: none;
   padding: 0;
+  height: calc(100vh - 224px);
+  overflow: scroll;
+  overflow-x: hidden;
 }
-.listUserItem.active {
+.listUserItem.active,
+.listUserItem:hover {
   background: #f7f7f7;
   border-radius: 11px;
 }
 
 .listUserItem {
   display: flex;
+
   flex-direction: row;
   margin: 43px 0;
+  cursor: pointer;
   padding: 8px 14px;
 }
+
 .listUserItem img {
   margin-right: 8px;
   width: 64px;
@@ -81,4 +85,11 @@ section.wrapper .app {
   font-size: 18px;
   line-height: 21px;
   color: #d4d4d5;
+}
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  height: 89vh;
 }
