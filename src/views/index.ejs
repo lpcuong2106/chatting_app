@@ -31,24 +31,7 @@
                     </div>
                     <div class="listUser">
                       <ul class="listUserView">
-                        <li  >
-                          <div class="listUserItem active">
-                            <img src="/assets/img/profile.svg" alt=""/>
-                            <div class="itemInfo">
-                                <h4>Cuongle</h4>
-                                <p>Online</p>
-                            </div>
-                          </div>
-                        </li>
-                        <li  >
-                          <div class="listUserItem">
-                            <img src="/assets/img/profile.svg" alt=""/>
-                            <div class="itemInfo">
-                                <h4>Cuongle</h4>
-                                <p>Online</p>
-                            </div>
-                          </div>
-                        </li>
+                       
                       </ul>
                     </div>
                 </div>
@@ -78,8 +61,34 @@
         input.value = '';
       }
     });
+
+    socket.on('user_join', function(msg){
+   
+      $('.listUserView').append(`
+            <li  >
+              <div class="listUserItem">
+                <img src="/assets/img/profile.svg" alt=""/>
+                <div class="itemInfo">
+                    <h4>${msg}</h4>
+                    <p>Online</p>
+                </div>
+              </div>
+            </li>
+            `)
+    })
     
+    socket.on('user_left', function(msg){
+      $('.listUserView li').each((index,item) => {
+       const infoItem = $(item).find('.itemInfo h4')[0].outerText
+       console.log('chay day', msg)
+       if(infoItem == msg){
+        $(item).remove();
+       }
+     
+      })
+    })
     socket.on('chat message', function(msg) {
+  
       var item = document.createElement('li');
       item.textContent = msg.user + " " + msg.message;
       messages.appendChild(item);

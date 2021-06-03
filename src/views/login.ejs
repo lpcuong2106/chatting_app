@@ -4,8 +4,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="/assets/login.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
@@ -15,13 +14,18 @@
                 <div class="col-4 sidebar" >
                     <h1 class="loginTitle">Login</h1>
                     <div class="info">
-                        <form action="/login" method="post">
+                        <form   class="loginForm" method="post">
                             <div class="form-input">
                                 <input name="username"  class="form-control " placeholder="Username"/>
                             </div>
                             <div class="form-input">
                                 <input name="password"  type="password" class="form-control " placeholder="Password"/>
                             </div>
+                          
+                            <div class="alert alert-error alert-dismissible fade show hidden" role="alert">
+                                <%= locals.message  %>
+                            </div>
+                            
                             <div class="form-input" style="text-align: center;">
                                 <button class="loginSubmit" type="submit">Login</button>
                             </div>
@@ -35,4 +39,41 @@
           </div>
       </section>
   </body>
+
+  <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        $(document).ready(function () {
+            $('.loginForm').on('submit', (e) => {
+                e.preventDefault();
+                let username = $('input[name="username"').val();
+                let password = $('input[name="password"').val();
+                $.ajax({
+                    type: "post",
+                    url: "/login",
+                    data: {
+                        username,
+                        password
+                    },
+                    dataType:'json',
+                
+                }).done((response) => {
+              
+                    if(response.status == 'OK'){
+                        socket.emit('create user', username);
+                        window.location.replace('/')
+                    }else{
+                        $('.alert-dismissible').removeClass('hidden').html('<strong>Error! </strong>' + response.data.message)
+                    }
+                       
+                
+                });
+            
+            })
+        });
+        
+    
+
+    </script>
+</html>
 </html>

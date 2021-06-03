@@ -8,15 +8,24 @@ const Login = (req, res) => {
      
         if(rows.length > 0){
             req.session.user = username;
-            return res.redirect('/');
+          
+            res.json({
+                status: 'OK',
+                data: {
+                    username: username
+                }
+               
+            })
         }else{
-            return res.render('login', {
-                message: 'Registration Complete. Please login to continue.',
-                messageClass: 'alert-success'
-            });
+            res.json({
+                status: 'ERROR',
+                data: {
+                    message: 'Username or password don"t match!',
+                }
+            })
         }
-       
-      })   
+      }) 
+   
 }
 
 const Register = (req, res) => {
@@ -35,7 +44,6 @@ const Register = (req, res) => {
 
     connectionDB.query(`SELECT count(*) as total_user from user where username = ?`, [username],function (err, [{total_user}], fields) {
         if (err) throw err
-        console.log(total_user)
         if(total_user > 0){
             return res.render('register', {
                 message: 'Account is existed!',
