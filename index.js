@@ -32,12 +32,12 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('new_user_join')
     socket.authenticated = false;
     socket.join('A_B')
-    socket.on('chat message', (msg) => {
+    socket.on('chat message', async (msg) => {
       console.log('client gui server', msg.room)
       const userFrom = msg.room.split('_')[0];
       const userTo = msg.room.split('_')[1];
-      const rows = connectionDB('insert into messages (user_from, user_to, message, created_at) values (?,?,?,?)', [userFrom, userTo, msg.message, new Date()])
-      console.log(rows)
+      await connectionDB('insert into messages (user_from, user_to, message, created_at) values (?,?,?,?)', [msg.id, userTo, msg.message, new Date()])
+
       io.to(msg.room).emit('chat message', msg);
     });
 

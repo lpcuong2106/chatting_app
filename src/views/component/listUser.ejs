@@ -1,0 +1,28 @@
+<div class="listUser">
+  <ul class="listUserView">
+    <li>
+      <a href="/" style="text-decoration: none">
+        <div class="listUserItem">
+          <img src="/assets/img/profile.svg" alt="" />
+          <div class="itemInfo">
+            <h4>Group All User</h4>
+            <p>Group</p>
+          </div>
+        </div>
+      </a>
+    </li>
+    <% listUser.forEach((user) => { %>
+    <li>
+      <a href="/messages/<%= user.id %>" style="text-decoration: none">
+        <div class="listUserItem">
+          <img src="/assets/img/profile.svg" alt="" />
+          <div class="itemInfo">
+            <h4><%= user.username %></h4>
+            <p>Member</p>
+          </div>
+        </div>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+</div>

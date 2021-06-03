@@ -5,7 +5,7 @@ const Login = (req, res) => {
 
     connectionDB(`SELECT * from user where username = ? and password = ?`, [username, password],function (err, rows, fields) {
         if (err) throw err
-     
+       
         if(rows.length > 0){
             req.session.user = {
                 username,
