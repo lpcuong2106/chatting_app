@@ -3,9 +3,9 @@ const util = require('util');
 
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: 'cuongdeptrai',
-  database: 'chatting_app',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
   insecureAuth : true
 })
 

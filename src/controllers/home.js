@@ -1,7 +1,7 @@
 const connectionDB = require('../connectionDB')
 
 const Home = (req, res) => {
-    connectionDB.query(`SELECT id,username from user`, [],function (err, rows, fields) {
+    connectionDB(`SELECT id,username from user`, [],function (err, rows, fields) {
         if (err) throw err
         const listUser = []
         if(rows.length > 0){
@@ -23,7 +23,7 @@ const Detail = (req, res) => {
     const { id } = req.params
  
     let userCurrent = ''
-    connectionDB.query(`SELECT id,username from user`, [],function (err, rows, fields) {
+    connectionDB(`SELECT id,username from user`, [],async function (err, rows, fields) {
         if (err) throw err
         const listUser = []
         if(rows.length > 0){
@@ -37,20 +37,15 @@ const Detail = (req, res) => {
                 })
             });
         }
-        let listMessage = []
+        
         // fetch list message
-        connectionDB.query('select * from messages where (user_from = ? and user_to = ?) or (user_from = ? and user_to = ?)', [id, userCurrent, userCurrent, id], function(err, rows){
-            if(err) console.log(err)
-            if(rows.length > 0){
-                console.log(rows)
-                listMessage = rows;
-            }
-        })
-        console.log('sau doi',listMessage)
+        const rowListMessage = await connectionDB('select * from messages as m join user as u on m.user_from = u.id where (user_from = ? and user_to = ?) or (user_from = ? and user_to = ?) order by created_at desc limit 100', [id, userCurrent, userCurrent, id])
+  
         return res.render('message', {
             listUser,
             userTo: id,
-            userCurrent
+            userCurrent,
+            listMessage: rowListMessage
         })
       })   
 }

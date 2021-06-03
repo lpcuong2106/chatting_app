@@ -33,11 +33,11 @@
                         <% listUser.forEach((user) => { %>
                           <li >
                             <a href="/messages/<%= user.id %>" style="text-decoration: none;">
-                            <div class="listUserItem">
+                            <div class="listUserItem <%- (user.id == userTo) ? 'active' : '' %>">
                               <img src="/assets/img/profile.svg" alt=""/>
                               <div class="itemInfo">
                                   <h4><%= user.username %></h4>
-                                  <p>Online</p>
+                                  <p>Member</p>
                               </div>
                             </div>
                           </a>
@@ -54,7 +54,11 @@
                       </form>
                      
                     </nav>
-                    <ul id="messages"></ul>
+                    <ul id="messages">
+                        <%  for(let i = listMessage.length -1 ; i >= 0 ; i--){ %>
+                                <li><%-listMessage[i].username + " "+ listMessage[i].message %></li>
+                        <% } %>
+                    </ul>
                     <form id="form" action="">
                       <input id="input" autocomplete="off" /><button>Send</button>
                     </form>

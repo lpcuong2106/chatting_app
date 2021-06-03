@@ -3,7 +3,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-
+require('dotenv').config()
 const io = new Server(server);
 global.io = io;
 const bodyParser = require('body-parser');
@@ -36,9 +36,8 @@ io.on('connection', (socket) => {
       console.log('client gui server', msg.room)
       const userFrom = msg.room.split('_')[0];
       const userTo = msg.room.split('_')[1];
-      connectionDB.query('insert into messages (user_from, user_to, message, created_at) values (?,?,?,?)', [userFrom, userTo, msg.message, new Date()], function(err){
-          if(err) console.log(err)
-      })
+      const rows = connectionDB('insert into messages (user_from, user_to, message, created_at) values (?,?,?,?)', [userFrom, userTo, msg.message, new Date()])
+      console.log(rows)
       io.to(msg.room).emit('chat message', msg);
     });
 

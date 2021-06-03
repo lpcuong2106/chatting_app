@@ -3,7 +3,7 @@ const connectionDB = require('../connectionDB')
 const Login = (req, res) => {
     const {username,password }= req.body;
 
-    connectionDB.query(`SELECT * from user where username = ? and password = ?`, [username, password],function (err, rows, fields) {
+    connectionDB(`SELECT * from user where username = ? and password = ?`, [username, password],function (err, rows, fields) {
         if (err) throw err
      
         if(rows.length > 0){
