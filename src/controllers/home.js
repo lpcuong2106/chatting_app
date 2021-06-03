@@ -50,7 +50,34 @@ const Detail = (req, res) => {
       })   
 }
 
+const searchUserCon = (req, res) => {
+    const { searchUser } = req.body
+    console.log(searchUser)
+    let userCurrent = ''
+    connectionDB(`SELECT id,username from user where username like ?`, ['%'+searchUser+'%'],async function (err, rows, fields) {
+        if (err) throw err
+        const listUser = []
+        if(rows.length > 0){
+            rows.forEach(row => {
+                if(row.id == req.session.user.id){
+                    userCurrent = row.id;
+                }
+                listUser.push({
+                    username: row.username,
+                    id: row.id,
+                })
+            });
+        }
+        
+        return res.json({
+            status: "OK",
+            data: listUser
+        })
+      })   
+}
+
 module.exports = {
    Home,
-   Detail
+   Detail,
+   searchUserCon
 }

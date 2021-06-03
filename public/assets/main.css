@@ -52,7 +52,8 @@ section.wrapper .app {
   list-style-type: none;
   padding: 0;
   height: calc(100vh - 224px);
-  overflow: scroll;
+
+  overflow-y: auto;
   overflow-x: hidden;
 }
 .listUserItem.active,

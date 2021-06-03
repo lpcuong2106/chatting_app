@@ -1,4 +1,4 @@
-const { Home, Detail } = require('../controllers/home');
+const { Home, Detail, searchUserCon } = require('../controllers/home');
 const { Login, Register } = require('../controllers/login');
 const { middlewareLogin } = require('../middleware/checkLogin');
 
@@ -42,4 +42,5 @@ router.get('/logout',(req,res) => {
 
 });
 
+router.post('/search-user', searchUserCon)
 module.exports = router;
