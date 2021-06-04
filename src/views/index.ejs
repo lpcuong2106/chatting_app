@@ -50,13 +50,14 @@
               <p>Group All User</p>
             </div>
           </nav>
-          <%- include('./component/listMessage', listMessage) %>
+          <%- include('./component/listMessage', listMessage, userCurrent) %>
         </div>
       </div>
     </section>
   </body>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/assets/js/main.js"></script>
   <script>
     var socket = io();
     $(document).ready(function () {
@@ -74,27 +75,8 @@
           input.value = "";
         }
       });
-
-      socket.on("new_user_join", function (msg) {
-        new Noty({
-          theme: "relax",
-          text: "Some notification text",
-          progressBar: true,
-          timeout: 1000,
-        }).show();
-      });
-
-      socket.on("chat message", function (msg) {
-        var item = document.createElement("li");
-        item.textContent = msg.user + " " + msg.message;
-        messages.appendChild(item);
-        setTimeout(() => {
-          var elem = document.getElementById("messages");
-          elem.scrollTop = elem.scrollHeight;
-        }, 500);
-      });
     });
-
+    renderMessage(socket, "<%= locals.user.id %>");
     // socket.on('user_left', function(msg){
     //   $('.listUserView li').each((index,item) => {
     //    const infoItem = $(item).find('.itemInfo h4')[0].outerText
@@ -103,7 +85,6 @@
     //     $(item).remove();
     //    }
     //   })
-    // })
+    //
   </script>
-  <script src="/assets/js/main.js"></script>
 </html>

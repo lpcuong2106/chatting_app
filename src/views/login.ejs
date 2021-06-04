@@ -58,15 +58,12 @@
                     dataType:'json',
                 
                 }).done((response) => {
-              
                     if(response.status == 'OK'){
                         socket.emit('create user', username);
                         window.location.replace('/')
                     }else{
                         $('.alert-dismissible').removeClass('hidden').html('<strong>Error! </strong>' + response.data.message)
                     }
-                       
-                
                 });
             
             })

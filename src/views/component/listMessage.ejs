@@ -1,6 +1,16 @@
 <ul id="messages">
-  <% for(let i = listMessage.length -1 ; i >= 0 ; i--){ %>
-  <li><%-listMessage[i].username + " "+ listMessage[i].message %></li>
+  <% for(let i = listMessage.length -1 ; i >= 0 ; i--){ %> <% let meClass =
+  (locals.userCurrent == listMessage[i].user_from) ? 'me' : ''%>
+  <li class="<%= meClass %>">
+    <% if(locals.userCurrent != listMessage[i].user_from){%>
+    <img src="/assets/img/profile.svg" alt="" class="iMsgContent" />
+    <% } %>
+    <div class="messageContent <%= meClass %>">
+      <%- (locals.userCurrent == listMessage[i].user_from) ?
+      listMessage[i].message : listMessage[i].username + ": "+
+      listMessage[i].message %>
+    </div>
+  </li>
   <% } %>
 </ul>
 <form id="form" action="">

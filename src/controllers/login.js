@@ -66,7 +66,7 @@ const Register = (req, res) => {
 
             connectionDB('SELECT LAST_INSERT_ID() as idNewUser;',function (err, [{idNewUser}], fields) {
                 if (err) throw err
-                console.log(idNewUser)
+      
                 req.session.user = {
                     username,
                     id: idNewUser

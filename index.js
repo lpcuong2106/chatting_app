@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
     socket.authenticated = false;
     socket.join('A_B')
     socket.on('chat message', async (msg) => {
-      console.log('client gui server', msg.room)
+ 
       const userFrom = msg.room.split('_')[0];
       const userTo = msg.room.split('_')[1];
       await connectionDB('insert into messages (user_from, user_to, message, created_at) values (?,?,?,?)', [msg.id, userTo, msg.message, new Date()])

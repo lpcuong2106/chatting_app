@@ -37,13 +37,14 @@
             </div>
           </nav>
 
-          <%- include('./component/listMessage', listMessage) -%>
+          <%- include('./component/listMessage', listMessage, userCurrent) -%>
         </div>
       </div>
     </section>
   </body>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/assets/js/main.js"></script>
   <script>
     var socket = io();
 
@@ -60,21 +61,13 @@
           message: input.value,
           user: "<%- locals.user.username %>",
           id: "<%= locals.user.id %>",
+          isMe: true,
           room: "<%- locals.userCurrent  %>_<%- locals.userTo %>",
         });
         input.value = "";
       }
     });
 
-    socket.on("chat message", function (msg) {
-      var item = document.createElement("li");
-      item.textContent = msg.user + " " + msg.message;
-      messages.appendChild(item);
-      setTimeout(() => {
-        var elem = document.getElementById("messages");
-        elem.scrollTop = elem.scrollHeight;
-      }, 500);
-    });
+    renderMessage(socket, "<%= locals.user.id %>");
   </script>
-  <script src="/assets/js/main.js"></script>
 </html>
