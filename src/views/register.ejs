@@ -2,45 +2,123 @@
 <html>
   <head>
     <title>Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="/assets/login.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/assets/login.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-</head>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+  </head>
   <body>
-      <section  class="container-fluid wrapper">
-          <div class="row">
-                <div class="col-4 sidebar" >
-                    <h1 class="loginTitle">Register</h1>
-                    <div class="info">
-                        <form action="/register" method="post">
-                            <div class="form-input">
-                                <input name="username"  class="form-control " placeholder="Username"/>
-                            </div>
-                            <div class="form-input">
-                                <input name="password"  type="password" class="form-control " placeholder="Password"/>
-                            </div>
-                            <div class="form-input">
-                                <input name="pre_password"  type="password" class="form-control " placeholder="Pre Password"/>
-                            </div>
-                            <% if(locals.message) { %>
-                                <div class="alert alert-error alert-dismissible fade show" role="alert">
-                                    <strong>Error!</strong> <%= locals.message  %>
-                                </div>
-                            <% } %>
-                            <div class="form-input" style="text-align: center;">
-                                <button class="loginSubmit" type="submit">SignUp</button>
-                            </div>
-                        </form>
-                        <p class="createAccount">Don't have any account? <a href="/login">Create an account</a></p>
-                    </div>
-                </div>
-                <div class="col-8">
-                    <img class="loginIcon" src="/assets/img/login.svg" alt=""/>
-                </div>  
+    <section class="container-fluid wrapper">
+      <div class="row">
+        <div class="col-4 sidebar">
+          <h1 class="loginTitle">Register</h1>
+          <div class="info">
+            <form action="/register" method="post" class="loginForm">
+              <div class="form-input">
+                <input
+                  name="username"
+                  class="form-control"
+                  placeholder="Username"
+                />
+              </div>
+              <div class="form-input">
+                <input
+                  name="password"
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                />
+              </div>
+              <div class="form-input">
+                <input
+                  name="pre_password"
+                  type="password"
+                  class="form-control"
+                  placeholder="Pre Password"
+                />
+              </div>
+
+              <div
+                class="alert alert-danger hidden alert-dismissible fade show"
+                role="alert"
+              >
+                <strong>Error!</strong> <%= locals.message %>
+              </div>
+
+              <div class="form-input" style="text-align: center">
+                <button class="loginSubmit" type="submit">SignUp</button>
+              </div>
+            </form>
+            <p class="createAccount">
+              Have any account? <a href="/login">Login an account</a>
+            </p>
           </div>
-      </section>
+        </div>
+        <div class="col-8">
+          <img class="loginIcon" src="/assets/img/login.svg" alt="" />
+        </div>
+      </div>
+    </section>
   </body>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    $(document).ready(function () {
+      $(".loginForm").on("submit", (e) => {
+        e.preventDefault();
+        let username = $('input[name="username"').val();
+        let password = $('input[name="password"').val();
+        let pre_password = $('input[name="pre_password"').val();
+        if (!username || !password || !pre_password) {
+          return $(".alert-dismissible")
+            .removeClass("hidden")
+            .html("<strong>Error! </strong> Please enter all the information!");
+        }
+
+        if (pre_password != password) {
+          return $(".alert-dismissible")
+            .removeClass("hidden")
+            .html(
+              "<strong>Error! </strong> Password and PrePassword not match!"
+            );
+        }
+
+        $.ajax({
+          type: "post",
+          url: "/register",
+          data: {
+            username,
+            password,
+            pre_password,
+          },
+          dataType: "json",
+        }).done((response) => {
+          if (response.status == "OK") {
+            socket.emit("create user", username);
+            window.location.replace("/");
+          } else {
+            $(".alert-dismissible")
+              .removeClass("hidden")
+              .html("<strong>Error! </strong>" + response.data.message);
+          }
+        });
+      });
+    });
+  </script>
 </html>

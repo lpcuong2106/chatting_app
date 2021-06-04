@@ -14,7 +14,7 @@ const Home = (req, res) => {
         }
         // fetch list message
         const rowListMessage = await connectionDB('select * from messages as m join user as u on m.user_from = u.id where  user_to = "B" order by created_at desc limit 100', [])
-        console.log(rowListMessage)
+      
         return res.render('index', {
             listUser,
             listMessage: rowListMessage
@@ -25,7 +25,7 @@ const Home = (req, res) => {
 const Detail = (req, res) => {
     const { id } = req.params
  
-    let userCurrent = ''
+    let userCurrent, userChat;
     connectionDB(`SELECT id,username from user`, [],async function (err, rows, fields) {
         if (err) throw err
         const listUser = []
@@ -33,6 +33,9 @@ const Detail = (req, res) => {
             rows.forEach(row => {
                 if(row.id == req.session.user.id){
                     userCurrent = row.id;
+                }
+                if(row.id == id){
+                    userChat = row.username
                 }
                 listUser.push({
                     username: row.username,
@@ -48,6 +51,7 @@ const Detail = (req, res) => {
             listUser,
             userTo: id,
             userCurrent,
+            userChat,
             listMessage: rowListMessage
         })
       })   
@@ -56,7 +60,7 @@ const Detail = (req, res) => {
 const searchUserCon = (req, res) => {
     const { searchUser } = req.body
    
-    let userCurrent = ''
+    let userCurrent;
     connectionDB(`SELECT id,username from user where username like ?`, ['%'+searchUser+'%'],async function (err, rows, fields) {
         if (err) throw err
         const listUser = []

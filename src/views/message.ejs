@@ -31,12 +31,10 @@
         </div>
         <div class="col-9">
           <nav>
-            <div>Username: <%- locals.user.username %></div>
-            <form action="/logout" method="post">
-              <div>
-                <button class="btn btn-warnning" type="submit">SignOut</button>
-              </div>
-            </form>
+            <div class="infoUserChat">
+              <img src="/assets/img/profile.svg" alt="" />
+              <p><%- userChat %></p>
+            </div>
           </nav>
 
           <%- include('./component/listMessage', listMessage) -%>
@@ -61,6 +59,7 @@
         socket.emit("chat message", {
           message: input.value,
           user: "<%- locals.user.username %>",
+          id: "<%= locals.user.id %>",
           room: "<%- locals.userCurrent  %>_<%- locals.userTo %>",
         });
         input.value = "";

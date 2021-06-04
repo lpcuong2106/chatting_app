@@ -63,7 +63,7 @@ section.wrapper .app {
   font-size: 48px;
   line-height: 56px;
   text-align: center;
-  color: #000000;
+  color: #4252dc;
 }
 .search-user {
   text-align: center;
@@ -91,8 +91,7 @@ section.wrapper .app {
 .listUserView {
   list-style-type: none;
   padding: 0;
-  height: calc(100vh - 224px);
-
+  height: calc(100vh - 460px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -138,5 +137,38 @@ section.wrapper .app {
 nav {
   position: sticky;
   top: 0;
-  background: bisque;
+  background: rgb(28, 30, 33);
+  padding: 6px 6px;
+  color: white;
+}
+
+.infoUserChat {
+  display: flex;
+  align-items: center;
+}
+.infoUserChat p {
+  margin: 0;
+  padding-left: 12px;
+  font-size: 17px;
+  font-weight: 600px;
+}
+.infoUserChat img {
+  width: 40px;
+  height: 40px;
+}
+
+.myProfile {
+  text-align: center;
+}
+.myProfile img {
+  width: 150px;
+  height: 150px;
+  margin-top: 30px;
+}
+.myProfile p {
+  font-size: 30px;
+}
+
+.btn-logout {
+  margin-bottom: 10px;
 }

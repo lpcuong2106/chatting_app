@@ -34,32 +34,51 @@ const Login = (req, res) => {
 const Register = (req, res) => {
     const {username,password,pre_password }= req.body;
     if(!password || !pre_password || !username){
-        return res.render('register', {
-            message: 'Please enter all the information!',
-        });
+        return  res.json({
+            status: 'ERROR',
+            data: {
+                message: 'Please enter all the information!',
+            }
+        }) 
     }
 
     if(password != pre_password){
-        return res.render('register', {
-            message: 'Password and PrePassword not match!',
-        });
+        return  res.json({
+            status: 'ERROR',
+            data: {
+                message: 'Password and PrePassword not match!',
+            }
+        }) 
     }
 
-    connectionDB.query(`SELECT count(*) as total_user from user where username = ?`, [username],function (err, [{total_user}], fields) {
+    connectionDB(`SELECT count(*) as total_user from user where username = ?`, [username],async function (err, [{total_user}], fields) {
         if (err) throw err
         if(total_user > 0){
-            return res.render('register', {
-                message: 'Account is existed!',
-            });
+            return  res.json({
+                status: 'ERROR',
+                data: {
+                    message: 'Account is existed!',
+                }
+            })  
            
         }else{
-            connectionDB.query(`insert into user (username, password) values (?,?); SELECT LAST_INSERT_ID();`, [username, password],function (err, rows, fields) {
-                // if (err) throw err
+            await connectionDB(`insert into user (username, password) values (?,?);`, [username, password])
+
+            connectionDB('SELECT LAST_INSERT_ID() as idNewUser;',function (err, [{idNewUser}], fields) {
+                if (err) throw err
+                console.log(idNewUser)
                 req.session.user = {
                     username,
-                    id: rows.id
+                    id: idNewUser
                 };
-                return res.redirect('/')
+       
+                return res.json({
+                    status: 'OK',
+                    data: {
+                        username: username
+                    }
+                   
+                })
             })
           
         }

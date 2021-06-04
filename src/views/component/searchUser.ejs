@@ -1,4 +1,15 @@
 <h1 class="titleApp">Thien Chat App</h1>
+<div class="profile">
+  <div class="myProfile">
+    <img src="/assets/img/profile.svg" alt="" />
+    <p><%- locals.user.username %></p>
+    <form action="/logout" method="post">
+      <div>
+        <button class="btn btn-dark btn-logout" type="submit">SignOut</button>
+      </div>
+    </form>
+  </div>
+</div>
 <div class="search-user">
   <form action="/search-user" method="post" class="submitSearch">
     <input placeholder="Search..." name="searchUser" />
